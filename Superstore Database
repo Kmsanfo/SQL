@@ -33,6 +33,7 @@ SELECT item_name
 FROM superstore
 ORDER BY price;
 
+
 #2 Write your own SQL query that will show a statistic about the item prices, like a sum, average, minimum, maximum, or count.
 
 SELECT SUM(price)
@@ -40,20 +41,24 @@ SELECT SUM(price)
 FROM superstore 
 GROUP BY item_name;
 
+
 SELECT MAX(price) 
 ,item_name
 FROM superstore
 GROUP BY item_name;
+
 
 SELECT MIN(price)
 ,item_name
 FROM superstore
 GROUP BY item_name;
 
+
 SELECT AVG(price)
 ,item_name
 FROM superstore
 GROUP BY item_name;
+
 
 SELECT COUNT(price)
 ,item_name
