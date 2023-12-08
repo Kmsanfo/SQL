@@ -2,13 +2,13 @@
 
 # The project was written using the PostgreSQL dialect and utilized data from the following two Netflix datasets:
 
-CREATE TABLE disney_characters
-    ("character_name" varchar(5), "type" varchar(7), "title" varchar(58), "country" varchar(74), "date_added" timestamp, "release_year" int, "rating" varchar(5), "duration" varchar(9), "listed_in" varchar(74))
+CREATE TABLE Disney_Characters ("Character_Name" varchar(25), "Movie_Name" varchar(25), "Character_Type" varchar(10), "Species" varchar(10))
 ;
 
-CREATE TABLE disney_characters ("Character_Name" varchar(25), "Movie_Name" varchar(25), "Character_Type" varchar(10), "Species" varchar(10))
+CREATE TABLE Disney_Movies ("Movie_Title" varchar(40), "Release_Year" varchar(7), "Setting" varchar(20))
 ;
-INSERT INTO disney_characters
+
+INSERT INTO Disney_Characters
 ("Character_Name", "Movie_Name", "Character_Type", "Species")
 VALUES
 ('Scar', 'Lion King', 'Villain', 'Animal'),
@@ -33,8 +33,8 @@ VALUES
 ('Mulan', 'Mulan', 'Hero', 'Human')
     ;
     
-INSERT INTO disney_movies
-    ("id", "movie_title", "release_year", "setting")
+INSERT INTO Disney_Movies
+    ("id", "Movie_Title", "Release_Year", "Setting")
 VALUES
     ('1', 'Alice In Wonderland', 1951, 'England'),
     ('2', 'Lion King', 1994, 'Africa'),
@@ -42,11 +42,11 @@ VALUES
     ('5', 'Up', 2009, 'Venezuela'),
     ('6', 'Encanto', 2021, 'Columbia'),
     ('7', 'Aladdin', 1992, 'Arabia'),
-    ('8', 'Hunchback Of Notre Dame', 1996, 'Paris'),
+    ('8', 'Hunchback Of Notre Dame', 1996, 'France'),
     ('9', 'Inside Out', 2015, 'USA'),
     ('10', 'Fox and the Hound', 1981, USA
     ('s11', 'Tarzan', 1999, 'Africa'),
-    ('12', 'Aristocats', 1970, 'Paris'),
+    ('12', 'Aristocats', 1970, 'France'),
     ('13', 'Oliver and Company', 1988, 'USA'),
     ('14', 'Finding Dory', 2016, 'USA'),
     ('15', 'Elemental', 2023, 'fantasy'),
@@ -58,34 +58,40 @@ VALUES
     ;
     
     
-# The following SQL was written to answer specific questions about the content on Netflix:
+# The following SQL was written to answer specific questions about the content on Disney Movies and their characters:
 
 
-#1. How many movie titles are there in the database? (movies only, not tv shows) 
-select count(*) 
-FROM "netflix_titles_info"
-WHERE type='Movie';
+#1. How many mix-specied characters are listed that are either heros or villains?
 
-#2. When was the most recent batch of tv shows and/or movies added to the database? 
-select max(date(date_added))
-FROM "netflix_titles_info";
+SELECT COUNT(*) 
+FROM Disney_Characters
+WHERE species='Mix'
+AND (Character_Type = 'Hero' OR Character_Type = 'Villain')
+GROUP BY Species;
 
-#3. List all the movies and tv shows in alphabetical order. 
-select title
-FROM "netflix_titles_info"
-ORDER BY title asc;
+#2. List all the movies in alphabetical order.
 
-#4. Who was the Director for the movie The Starling? 
-select 
-director
-FROM "netflix_titles_info" titles
-LEFT JOIN "netflix_people" people
-ON titles.show_id=people.show_id
-where titles.title='The Starling'
+SELECT Movie_Title
+FROM Disney_Movies
+ORDER BY Movie_Title asc;
+
+#3. Who are all the animal characters where their movies took place somewhere other than the USA?
+SELECT Character_Name, Type, Setting
+FROM Disney_Characters
+LEFT JOIN Disney_Movies
+ON Disney_Characters.Movie_Name=Disney_Movies.Movie_Title
+WHERE Setting != "USA"
+
+#4. How many hero characters are listed with movies that were made after 1990? 
+SELECT COUNT (*)
+FROM Disney_Characters
+LEFT JOIN Disney_Movies
+ON Disney_Charcters.Movie_Name=Disney_Movies.Movie_Title
+WHERE Release_Date >=1990
+ORDER BY Species
+
 
 #5. What is the oldest movie in the database and what year was it made? 
-select title, release_year
-FROM "netflix_titles_info"
-WHERE type='Movie'
-ORDER BY release_year asc
-LIMIT 1;
+select Movie_Title, Release_Year
+FROM Disney_Movies
+ORDER BY Release_Year asc
