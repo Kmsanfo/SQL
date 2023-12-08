@@ -1,0 +1,91 @@
+# This project reveals insights about Disney characters and the movies they were associated with. 
+
+# The project was written using the PostgreSQL dialect and utilized data from the following two Netflix datasets:
+
+CREATE TABLE disney_characters
+    ("character_name" varchar(5), "type" varchar(7), "title" varchar(58), "country" varchar(74), "date_added" timestamp, "release_year" int, "rating" varchar(5), "duration" varchar(9), "listed_in" varchar(74))
+;
+
+CREATE TABLE disney_characters ("Character_Name" varchar(25), "Movie_Name" varchar(25), "Character_Type" varchar(10), "Species" varchar(10))
+;
+INSERT INTO disney_characters
+("Character_Name", "Movie_Name", "Character_Type", "Species")
+VALUES
+('Scar', 'Lion King', 'Villain', 'Animal'),
+('Simba', 'Lion King', 'Hero', 'Animal'),
+('Hans', 'Frozen', 'Villain', 'Human'),
+('Elsa', 'Frozen', 'Hero', 'Human'),
+('Bing Bong', 'Inside Out', 'Sidekick', 'Mix'),
+('Marie', 'Aristocats', 'Other', 'Animal'),
+('Belle', 'Beauty and the Beast', 'Hero', 'Human'),
+('Ariel', 'Little Mermaid', 'Hero', 'Mix'),
+('Chip', 'Beauty and the Beast', 'Sidekick', 'Mix'),
+('Quasimodo', 'Hunchback of Notre Dame', 'Hero', 'Human'),
+('Mickey Mouse', 'Fantasia', 'Hero', 'Animal'),
+('Rapunzel', 'Tangled', 'Hero', 'Human'),
+('Maleficent', 'Sleeping Beauty', 'Villain', 'Mix'),
+('Penelope von Sweetness', 'Wreck It Ralph', 'Hero', 'Human'),
+('Genie', 'Aladdin', 'Sidekick', 'Other'),
+('Buzz Lightyear', 'Toy Story', 'Hero', 'Other'),
+('Morgana', 'Little Mermaid 2', 'Villain', 'Mix'),
+('Jane', 'Tarzan', 'Hero', 'Human'),
+('Thumper', 'Bambi', 'Sidekick', 'Animal'),
+('Mulan', 'Mulan', 'Hero', 'Human')
+    ;
+    
+INSERT INTO disney_movies
+    ("id", "movie_title", "release_year", "setting")
+VALUES
+    ('1', 'Alice In Wonderland', 1951, 'England'),
+    ('2', 'Lion King', 1994, 'Africa'),
+    ('3', 'Frozen', 2013, 'Norway'),
+    ('5', 'Up', 2009, 'Venezuela'),
+    ('6', 'Encanto', 2021, 'Columbia'),
+    ('7', 'Aladdin', 1992, 'Arabia'),
+    ('8', 'Hunchback Of Notre Dame', 1996, 'Paris'),
+    ('9', 'Inside Out', 2015, 'USA'),
+    ('10', 'Fox and the Hound', 1981, USA
+    ('s11', 'Tarzan', 1999, 'Africa'),
+    ('12', 'Aristocats', 1970, 'Paris'),
+    ('13', 'Oliver and Company', 1988, 'USA'),
+    ('14', 'Finding Dory', 2016, 'USA'),
+    ('15', 'Elemental', 2023, 'fantasy'),
+    ('16', 'Bambi', 1942, 'Austria'),
+    ('17', 'Peterpan', 1953, 'London'),
+    ('18', 'Cars', 2006, 'USA'),
+    ('19', 'The Black Cauldron', 1985, 'fantasy'),
+    ('20', 'Beauty and the Beast', 1991, 'France')
+    ;
+    
+    
+# The following SQL was written to answer specific questions about the content on Netflix:
+
+
+#1. How many movie titles are there in the database? (movies only, not tv shows) 
+select count(*) 
+FROM "netflix_titles_info"
+WHERE type='Movie';
+
+#2. When was the most recent batch of tv shows and/or movies added to the database? 
+select max(date(date_added))
+FROM "netflix_titles_info";
+
+#3. List all the movies and tv shows in alphabetical order. 
+select title
+FROM "netflix_titles_info"
+ORDER BY title asc;
+
+#4. Who was the Director for the movie The Starling? 
+select 
+director
+FROM "netflix_titles_info" titles
+LEFT JOIN "netflix_people" people
+ON titles.show_id=people.show_id
+where titles.title='The Starling'
+
+#5. What is the oldest movie in the database and what year was it made? 
+select title, release_year
+FROM "netflix_titles_info"
+WHERE type='Movie'
+ORDER BY release_year asc
+LIMIT 1;
